@@ -46,3 +46,18 @@ module.exports.loginUser = (req, res) => {
         return res.status(400).send({ message: "Invalid email format" });
     }
 };
+
+module.exports.getUserDetails = (req, res) => {
+    return User.findById(req.user.id)
+    .then(user => {
+        if(user === null){
+            return res.status(404).send({
+                message: "User not found"
+            });
+        } else {
+            user.password = "";
+            return res.status(200).send(user);
+        }
+    })
+    .catch(error => errorHandler(error, req, res));
+};
